@@ -78,7 +78,7 @@ public class Platform {
             return new ChromeDriver(getChromeOptions());
         }
 
-        throw new Exception();
+        throw new Exception("NO PLATFORM FOUND");
 
     }
 

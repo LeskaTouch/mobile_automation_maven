@@ -1,6 +1,7 @@
 package lib.ui_common;
 
 import io.appium.java_client.MobileDriver;
+import io.qameta.allure.Step;
 import lib.test_case.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
@@ -19,6 +20,7 @@ abstract public class ArticlePageObject extends MainPageObject {
         super(driver);
     }
 
+    @Step("Waiting for the title element to appear")
     public WebElement waitForTitleElement(){
 
         return waitForElement(
@@ -27,6 +29,7 @@ abstract public class ArticlePageObject extends MainPageObject {
                 5);
     }
 
+    @Step("Get title text of the article")
     public String getTitleText(){
         WebElement el = waitForTitleElement();
 
@@ -37,10 +40,13 @@ abstract public class ArticlePageObject extends MainPageObject {
         }
     }
 
+    @Step("Compare the title of the article equals '{expected_title}'")
     public void assertTitleEquals(String expected_title){
+        attach(takeScreenshots("click_article"));
         Assert.assertEquals("The title is not as expected", getTitleText(), expected_title);
     }
 
+    @Step("Save the article to the reading list")
     public void saveArticle(){
         if (Platform.getInstance().isWebMobile()){
             deleteArticleIfAdded();
@@ -51,6 +57,7 @@ abstract public class ArticlePageObject extends MainPageObject {
                 1);
     }
 
+    @Step("Go back from article page on mobile app")
     public void clickBackButton(){
         if (Platform.getInstance().isAndroid()|| Platform.getInstance().isIOS()) {
             waitForElementAndClick(
@@ -68,6 +75,7 @@ abstract public class ArticlePageObject extends MainPageObject {
 
 
     }
+    @Step ("Initialize search input")
     public void initSearchElement(){
         waitForElementAndClick(getLocator(INIT_SEARCH_ELEMENT),
                 "No search field is found",

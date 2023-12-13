@@ -4,13 +4,22 @@ import io.appium.java_client.MobileDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import io.qameta.allure.Attachment;
+import org.apache.commons.io.FileUtils;
+import org.aspectj.util.FileUtil;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -119,26 +128,52 @@ public class MainPageObject {
             throw new IllegalArgumentException("The locator contains neither id nor xpath");
         }
 
-        }
+    }
 
-        public boolean isElementPresent(String selector) {
+    public boolean isElementPresent(String selector) {
         System.out.println(selector);
             return numberOfElements(getLocator(selector)) > 0;
         }
 
-        public void tryClickElementWithFewAttemp(String locator, String error_message, int number_attempt){
+        public void tryClickElementWithFewAttemp(By locator, String error_message, int number_attempt){
         int current_attempt= 0;
         boolean need_more_attempt=true;
         while (need_more_attempt) {
             try {
-                waitForElementAndClick(getLocator(locator), error_message, 1);
+                waitForElementAndClick(locator, error_message, 1);
                 need_more_attempt = false;
             } catch (Exception e) {
                 if (current_attempt > number_attempt) {
-                    waitForElement(getLocator(locator), error_message, 1);
+                    waitForElement(locator, error_message, 1);
                 }
             }
             ++current_attempt;
         }
+    }
+    public String takeScreenshots(String name){
+        File srcFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+
+        String path = System.getProperty("user.dir") + "/" + name + "_screenshot.png";
+        try {
+            File newFile = new File(path);
+            Files.deleteIfExists(newFile.toPath());
+
+            FileUtils.moveFile(srcFile, newFile);
+        } catch(IOException e) {
+            System.out.println("Cannot take a screenshot: " + e.getMessage());
         }
+
+        return path;
+    }
+
+    @Attachment
+    public static byte[] attach(String path345) {
+        try {
+            return Files.readAllBytes(Paths.get(path345));
+        } catch(IOException e) {
+            System.out.println("Can not attach file: " + e.getMessage());
+        }
+
+        return new byte[0];
+    }
 }

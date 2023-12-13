@@ -11,9 +11,9 @@ import tests.SearchTests;
 
 @Suite.SuiteClasses({
         ArticleTests.class,
-//        ChangeAppConditionsTests.class,
-//        MyListsTests.class,
-//        SearchTests.class
+        ChangeAppConditionsTests.class,
+         MyListsTests.class,
+        SearchTests.class
 
 
 })

@@ -1,6 +1,7 @@
 package lib.ui_common;
 
 import io.appium.java_client.MobileDriver;
+import io.qameta.allure.Step;
 import lib.test_case.Platform;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -16,6 +17,7 @@ abstract public class MyListsPageObject extends MainPageObject {
 
     }
 
+    @Step("Click Folder with saved articles")
     public void openSavedArticlesFolder(){
         waitForElementAndClick(
                 getLocator(SAVED_ARTICLES_FOLDER),
@@ -28,6 +30,7 @@ abstract public class MyListsPageObject extends MainPageObject {
         waitForElementAndClick(getLocator(CLOSE_SYNC_POPUP), "NO SYNC POPUP CLOSE BTN", 5);
     }
 
+    @Step("Delete the article '{article_name}' by swiping for mobile, click delete button for mobile web ")
     public void swipeByArticleToDelete(String article_name) {
         if (Platform.getInstance().isIOS() || Platform.getInstance().isAndroid()) {
             swipeToTheLeft(
@@ -39,10 +42,11 @@ abstract public class MyListsPageObject extends MainPageObject {
         }
     }
 
-    public String getRemoveButtonByTitle(String article_name){
+    private String getRemoveButtonByTitle(String article_name){
         return DELETE_BUTTON_FOR_ARTICLE.replace("{ARTICLE_NAME}", article_name);
 
     }
+    @Step("Click the article with description '{article_description}'")
 
     public void clickArticleDescription(String article_description){
 
@@ -53,6 +57,7 @@ abstract public class MyListsPageObject extends MainPageObject {
 
     }
 
+    @Step("Click the article with the title '{article_title}'")
     public void clickArticleTitle(String article_title){
 
         waitForElementAndClick(
